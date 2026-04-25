@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Clicker</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Vue Clicker</h1>
+
+        <p>Clicked {{ count }} times</p>
+
+        <button v-on:click="incrementCounter">
+            Increment counter
+        </button>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <script>
+        const { createApp, ref } = Vue;
+
+        const app = createApp({
+            setup() {
+                const count = ref(0);
+
+                function incrementCounter() {
+                    count.value++;
+                }
+
+                return {
+                    count,
+                    incrementCounter
+                };
+            }
+        });
+
+        app.mount("#app");
+    </script>
+</body>
+</html>
