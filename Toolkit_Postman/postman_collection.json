@@ -1,27 +1,26 @@
 {
   "info": {
-    "_postman_id": "ec0a02f2-1e1a-4c47-a88e-1834721ef1dd",
-    "name": "My Collection",
-    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "54295763",
-    "_collection_link": "https://go.postman.co/collection/54295763-ec0a02f2-1e1a-4c47-a88e-1834721ef1dd?source=collection_link"
+    "_postman_id": "2e9f3a4d-33b8-4b0e-8e92-5f0f5178c5a1",
+    "name": "Toolkit Postman Lab",
+    "description": "Requests for lab work: VK, GeoIP, ReqRes register and login.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "GET geoiplookup.io",
+      "name": "GET VK",
       "event": [
         {
           "listen": "test",
           "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {",
-              "    pm.response.to.have.status(200);",
-              "});"
-            ],
             "type": "text/javascript",
-            "packages": {},
-            "requests": {}
+            "exec": [
+              "pm.test('Response has Content-Type header', function () {",
+              "  pm.expect(pm.response.headers.has('Content-Type')).to.eql(true);",
+              "});",
+              "pm.test('Response has a status code', function () {",
+              "  pm.expect(pm.response.code).to.be.a('number');",
+              "});"
+            ]
           }
         }
       ],
@@ -29,55 +28,113 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "https://json.geoiplookup.io/",
-          "protocol": "https",
+          "raw": "{{vkUrl}}",
           "host": [
-            "json",
-            "geoiplookup",
-            "io"
-          ],
-          "path": [
-            ""
+            "{{vkUrl}}"
           ]
         },
-        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+        "description": "GET request to VK. In Postman the response is available because Postman is not restricted by browser CORS. Check Content-Type, cookies/security headers and CORS-related headers."
+      },
+      "response": []
+    },
+    {
+      "name": "GET GeoIP",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response is JSON', function () {",
+              "  pm.response.to.be.json;",
+              "});",
+              "pm.test('Response contains IP field', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('ip');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{geoipUrl}}",
+          "host": [
+            "{{geoipUrl}}"
+          ]
+        },
+        "description": "GET request to GeoIP API. Check Content-Type and Access-Control-Allow-Origin headers."
       },
       "response": []
     },
     {
       "name": "GET ReqRes Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response contains users list', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('data');",
+              "});"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "GET",
         "header": [
           {
             "key": "x-api-key",
-            "value": "free_user_3Cod5UdC3D2WkaEZ64kQICo2aTf",
+            "value": "{{reqresApiKey}}",
             "type": "text"
           }
         ],
         "url": {
-          "raw": "https://reqres.in/api/users",
-          "protocol": "https",
+          "raw": "{{reqresBaseUrl}}/users",
           "host": [
-            "reqres",
-            "in"
+            "{{reqresBaseUrl}}"
           ],
           "path": [
-            "api",
             "users"
           ]
-        }
+        },
+        "description": "List of prepared users for register/login tasks."
       },
       "response": []
     },
     {
       "name": "POST ReqRes Register",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response contains token', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('token');",
+              "});"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [
           {
             "key": "x-api-key",
-            "value": "free_user_3Cod5UdC3D2WkaEZ64kQICo2aTf",
+            "value": "{{reqresApiKey}}",
             "type": "text"
           }
         ],
@@ -87,62 +144,63 @@
             {
               "key": "email",
               "value": "eve.holt@reqres.in",
-              "type": "text",
-              "uuid": "7d7259bb-c0ae-48d6-b70e-260dedc5eaad"
+              "type": "text"
             },
             {
               "key": "password",
               "value": "123456",
-              "type": "text",
-              "uuid": "b7f15847-1a1a-4824-ab7c-f205d70e76ab"
+              "type": "text"
             }
           ]
         },
         "url": {
-          "raw": "https://reqres.in/api/register",
-          "protocol": "https",
+          "raw": "{{reqresBaseUrl}}/register",
           "host": [
-            "reqres",
-            "in"
+            "{{reqresBaseUrl}}"
           ],
           "path": [
-            "api",
             "register"
           ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "GET vk.com",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "https://vk.com",
-          "protocol": "https",
-          "host": [
-            "vk",
-            "com"
-          ]
-        }
+        },
+        "description": "Register request. Body encoding is x-www-form-urlencoded with email and password fields."
       },
       "response": []
     },
     {
       "name": "POST ReqRes Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Response contains token', function () {",
+              "  pm.expect(pm.response.json()).to.have.property('token');",
+              "});"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [
           {
             "key": "x-api-key",
-            "value": "free_user_3Cod5UdC3D2WkaEZ64kQICo2aTf",
+            "value": "{{reqresApiKey}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
             "type": "text"
           }
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"email\": \"eve.holt@reqres.in\",\r\n  \"password\": \"123456\"\r\n}",
+          "raw": "{\n  \"email\": \"eve.holt@reqres.in\",\n  \"password\": \"123456\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -150,19 +208,39 @@
           }
         },
         "url": {
-          "raw": "https://reqres.in/api/login",
-          "protocol": "https",
+          "raw": "{{reqresBaseUrl}}/login",
           "host": [
-            "reqres",
-            "in"
+            "{{reqresBaseUrl}}"
           ],
           "path": [
-            "api",
             "login"
           ]
-        }
+        },
+        "description": "Login request. Body is a JSON object with email and password fields."
       },
       "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "vkUrl",
+      "value": "https://vk.com",
+      "type": "string"
+    },
+    {
+      "key": "geoipUrl",
+      "value": "https://json.geoiplookup.io/",
+      "type": "string"
+    },
+    {
+      "key": "reqresBaseUrl",
+      "value": "https://reqres.in/api",
+      "type": "string"
+    },
+    {
+      "key": "reqresApiKey",
+      "value": "reqres-free-v1",
+      "type": "string"
     }
   ]
 }

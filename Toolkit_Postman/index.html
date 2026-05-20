@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolkit/Postman Lab</title>
+  <link rel="stylesheet" href="./shared/styles.css">
+</head>
+<body class="shell">
+  <header class="header">
+    <div>
+      <p class="kicker">Toolkit, Postman</p>
+      <h1 id="app-title">Toolkit/Postman Lab</h1>
+    </div>
+    <div class="mode-pill" id="mode-pill">mode</div>
+  </header>
+
+  <main class="content">
+    <section class="card-grid" aria-label="Tasks">
+      <a class="card" href="./task1/">
+        <strong>PixiJS</strong>
+        <span>Вращение прямоугольника с параметрами из env.</span>
+      </a>
+      <a class="card" href="./task2/">
+        <strong>Axios + VK</strong>
+        <span>GET-запрос в браузере и сравнение с Node.js.</span>
+      </a>
+      <a class="card" href="./task3/">
+        <strong>Axios + GeoIP</strong>
+        <span>GET-запрос к JSON API в браузере и Node.js.</span>
+      </a>
+    </section>
+
+    <section class="panel">
+      <h2>Активная конфигурация</h2>
+      <div id="env-table"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./shared/home.js"></script>
+</body>
+</html>

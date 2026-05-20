@@ -1,23 +1,36 @@
 import axios from "axios";
+import { env, logDebug, renderEnvTable } from "../shared/env.js";
+import { renderAxiosError, renderJson, renderResponseSummary, setStatus } from "../shared/request-view.js";
 
-axios.get("https://json.geoiplookup.io/")
-    .then((response) => {
-        console.log("Browser response:");
-        console.log("Status:", response.status);
-        console.log("Data:", response.data);
+renderEnvTable("#env-table");
 
-        console.log("IP:", response.data.ip);
-        console.log("Country:", response.data.country_name);
-        console.log("City:", response.data.city);
-        console.log("ISP:", response.data.isp);
-    })
-    .catch((error) => {
-        console.log("Browser error:");
-        console.log(error.message);
+async function run() {
+  setStatus("requesting", "neutral");
 
-        if (error.response) {
-            console.log("Status:", error.response.status);
-            console.log("Data:", error.response.data);
-        }
+  try {
+    const response = await axios.get(env.geoipUrl, {
+      timeout: env.timeoutMs
     });
-    
+
+    const summary = {
+      ...renderResponseSummary(response),
+      extractedFields: {
+        ip: response.data?.ip,
+        country: response.data?.country_name,
+        city: response.data?.city,
+        isp: response.data?.isp
+      }
+    };
+
+    setStatus(`HTTP ${response.status}`, "success");
+    renderJson("#result", summary);
+    logDebug("GeoIP browser response", summary);
+  } catch (error) {
+    const summary = renderAxiosError(error);
+    setStatus("blocked or failed", "error");
+    renderJson("#result", summary);
+    logDebug("GeoIP browser error", summary);
+  }
+}
+
+run();

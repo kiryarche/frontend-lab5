@@ -1,12 +1,31 @@
 {
-  "name": "toolkit_postman",
+  "name": "toolkit-postman-lab",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lab work for PixiJS, Axios, Postman and Vite environment builds",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:local": "vite --mode lab-local",
+    "dev:dev": "vite --mode dev",
+    "dev:prod": "vite --mode prod",
+    "build:local": "vite build --mode lab-local",
+    "build:dev": "vite build --mode dev",
+    "build:prod": "vite build --mode prod",
+    "preview:local": "vite preview --mode lab-local --outDir dist/local",
+    "preview:dev": "vite preview --mode dev --outDir dist/dev",
+    "preview:prod": "vite preview --mode prod --outDir dist/prod",
+    "node:vk": "node task2/node.js",
+    "node:vk:dev": "node task2/node.js --mode dev",
+    "node:vk:prod": "node task2/node.js --mode prod",
+    "node:geoip": "node task3/node.js",
+    "node:geoip:dev": "node task3/node.js --mode dev",
+    "node:geoip:prod": "node task3/node.js --mode prod"
   },
-  "keywords": [],
+  "keywords": [
+    "pixijs",
+    "axios",
+    "postman",
+    "vite"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
